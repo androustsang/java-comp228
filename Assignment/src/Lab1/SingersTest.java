@@ -50,6 +50,8 @@ public class SingersTest {
 
         // Now create other objects with different constructors
         System.out.println();
+
+        // Object creation with constructor of 1 argument
         Singers singer2 = new Singers(2);
         System.out.println("Other constructors are used for creating additional objects.");
         System.out.println("The default value of singer2 is as follows with constructor of 1 argument.");
@@ -60,6 +62,7 @@ public class SingersTest {
         System.out.println("Number of albums is: " + singer2.getNumberOfAlbums());
 
         System.out.println();
+        // Object creation with constructor of 2 arguments
         Singers singer3 = new Singers(3,"Singer 3");
         System.out.println("The default value of singer3 is as follows with constructor of 2 arguments.");
         System.out.println("id is: " + singer3.getId());
@@ -69,6 +72,7 @@ public class SingersTest {
         System.out.println("Number of albums is: " + singer3.getNumberOfAlbums());
 
         System.out.println();
+        // Object creation with constructor of 3 arguments
         Singers singer4 = new Singers(4,"Singer 4","Somewhere out there");
         System.out.println("The default value of singer4 is as follows with constructor of 3 arguments.");
         System.out.println("id is: " + singer4.getId());
@@ -78,6 +82,7 @@ public class SingersTest {
         System.out.println("Number of albums is: " + singer4.getNumberOfAlbums());
 
         System.out.println();
+        // Object creation with constructor of 4 arguments
         Singers singer5 = new Singers(5,"Singer 5","Somewhere out there 5",LocalDate.of(1995,6,1));
         System.out.println("The default value of singer5 is as follows with constructor of 4 arguments.");
         System.out.println("id is: " + singer5.getId());
@@ -87,6 +92,7 @@ public class SingersTest {
         System.out.println("Number of albums is: " + singer5.getNumberOfAlbums());
 
         System.out.println();
+        // Object creation with constructor of 5 arguments
         Singers singer6 = new Singers(6,"Singer 6","Somewhere out there 6",LocalDate.of(1997,9,1),20);
         System.out.println("The default value of singer6 is as follows with constructor of 5 arguments.");
         System.out.println("id is: " + singer6.getId());
