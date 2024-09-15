@@ -1,7 +1,7 @@
 package Lab1;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatter; // Driver Class
 
 public class SingersTest {
     public static void main(String[] args) {
@@ -88,7 +88,7 @@ public class SingersTest {
 
         System.out.println();
         Singers singer6 = new Singers(6,"Singer 6","Somewhere out there 6",LocalDate.of(1997,9,1),20);
-        System.out.println("The default value of singer5 is as follows with constructor of 5 arguments.");
+        System.out.println("The default value of singer6 is as follows with constructor of 5 arguments.");
         System.out.println("id is: " + singer6.getId());
         System.out.println("Singer name is: " + singer6.getSingerName());
         System.out.println("Singer address is: " + singer6.getSingerAddress());
