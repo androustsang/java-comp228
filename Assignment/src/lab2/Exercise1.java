@@ -1,30 +1,14 @@
 package lab2;
 
-import java.security.SecureRandom;
 
+// Please refer to the Test class for the coding for majority of code in Exercise 1.
 public class Exercise1 {
 
     public static void main(String[] args) {
 
+        // Calling the Test class and the invoke the inputAnswer method.
         Test revision = new Test();
-
         revision.inputAnswer();
-
-/*
-        // prompt user to enter name
-        String name = JOptionPane.showInputDialog("Enter your name ?");
-
-        // create the message
-        String message = String.format("Welcome, %s, to the Java Programming!", name);
-
-        // display the message to the user
-        JOptionPane.showMessageDialog(null, message);
-
-        // JOptionPane.
-
-
-    // end class NameDialog
-*/
     }
 
 }
