@@ -34,12 +34,14 @@ public class Lotto {
         Object[] userOptions = {3,4,5,6,7,8,9,10,
                 11,12,13,14,15,16,17,18,19,20,
                 21,22,23,24,25,26,27}; // This integer array stores the allowed choices for user
+        // The integer array is cast as Object[] due to JOptionPane function parameter requirement
+
 
         Status gameStatus = Status.CONTINUE; // Can continue CONTINUE, USERWON, USERLOST
 
         for (int i = 0; i < 5; i++) {   // Runs the lotto up to 5 times
             Lotto gameLotto = new Lotto();  // Get a new lotto each time
-            int[] gameLottoArray = gameLotto.getLottoArray();   // Get the array
+            int[] gameLottoArray = gameLotto.getLottoArray();   // Get the lotto array
             int gameLottoSum = 0;   //initialize for each round to calculate the Lotto sum
 
             // For-loop to calcuation the sum of lotto
