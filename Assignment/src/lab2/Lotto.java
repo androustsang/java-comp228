@@ -47,7 +47,7 @@ public class Lotto {
                 gameLottoSum += gameLottoArray[j];
             }
 
-            System.out.println("The Lotto Sum is: " + gameLottoSum); // For debugging use
+            // System.out.println("The Lotto Sum is: " + gameLottoSum); // For debugging use
 
             // Use JOptionPane to pick up the user selection, return type is Object.
             Object userSelection = JOptionPane.showInputDialog(null,
