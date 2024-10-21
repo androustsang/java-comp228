@@ -12,8 +12,6 @@ public abstract class Mortgage implements MortgageConstants {
 
     //  In the Contructors, set value by using the corresponding setters
     // method to validate for mortgageAmount and term
-//    public Mortgage(String mortgageType, String mortgageNumber, String customerName, int mortgageAmount, double interestRate, int term) {
-//    public Mortgage(String mortgageNumber, String customerName, int mortgageAmount, double interestRate, int term) {
     public Mortgage(String mortgageNumber, String customerName, int mortgageAmount, int term) {
 //        this.mortgageType = mortgageType;
         this.mortgageNumber = mortgageNumber;

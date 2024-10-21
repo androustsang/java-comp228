@@ -3,9 +3,11 @@ package Lab3;
 import java.util.Scanner;
 
 // import the static constants from MortgageConstants
-import static Lab3.MortgageConstants.SHORT_TERM;
-import static Lab3.MortgageConstants.MEDIUM_TERM;
-import static Lab3.MortgageConstants.LONG_TERM;
+import static Lab3.MortgageConstants.*;
+
+//import static Lab3.MortgageConstants.SHORT_TERM;
+//import static Lab3.MortgageConstants.MEDIUM_TERM;
+//import static Lab3.MortgageConstants.LONG_TERM;
 
 public class ProcessMortgage {
     public static void main(String[] args) {
@@ -13,6 +15,7 @@ public class ProcessMortgage {
         // Superclass array of size 3
         Mortgage[] mortgageArray = new Mortgage[3];
 
+        System.out.println("Welcome to " + BANKNAME + " Bank!");
         // Get the prime rate first from the user
         System.out.println("Please input the current Prime Rate in ** Percentage ** (do not key in the symbol %):");
         Scanner sc = new Scanner(System.in);
@@ -55,6 +58,8 @@ public class ProcessMortgage {
             }
 
             // Based on the input of S or M or L, set the term in integer accordingly
+            // In the superclass "Mortgage", we also perform the checking if the term is not set
+            // or not in allowed list, it changes to Short term as well
             int mortgageTerm = 0;
             switch (mortgageTermText) {
                 case "S": mortgageTerm = SHORT_TERM; break;
