@@ -12,6 +12,9 @@
     -fx-font-weight: bold;
 }
 
+.boldtext {
+    -fx-font-weight: bold;
+}
 
 .radio-button {
     -fx-label-padding: 0 4 0 0;
