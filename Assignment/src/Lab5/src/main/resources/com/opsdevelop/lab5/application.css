@@ -1,0 +1,13 @@
+.textfield {
+    -fx-border-color: BLACK !important;
+    -fx-border-width: 1;
+    -fx-background-color: WHITE !important;
+}
+
+.gridpane {
+    -fx-background-color: lightgray;
+}
+
+.label {
+    -fx-font-weight: bold;
+}

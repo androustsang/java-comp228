@@ -40,11 +40,13 @@ public class InsuracneRunnable {
             // Asking the user to input the monthly cost
             System.out.println("Please enter the monthly cost:");
             double monthlyCost = sc.nextDouble();
+            sc.nextLine();
 
             // Loop to ensure that the monthly cost is not negative
             while (monthlyCost < 0) {
                 System.out.println("Please enter a valid monthly cost:");
                 monthlyCost = sc.nextDouble();
+                sc.nextLine();
             }
 
 
