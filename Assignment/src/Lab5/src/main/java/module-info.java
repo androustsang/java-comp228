@@ -10,6 +10,9 @@ module com.opsdevelop.lab5 {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires java.sql;
+    requires com.oracle.database.jdbc;
+    requires io.github.cdimascio.dotenv.java;
 
     opens com.opsdevelop.lab5 to javafx.fxml;
     exports com.opsdevelop.lab5;
