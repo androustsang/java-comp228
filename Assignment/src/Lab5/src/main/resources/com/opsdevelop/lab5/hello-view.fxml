@@ -140,12 +140,12 @@
                   <Insets left="20.0" top="20.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="playerNewBtn" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefWidth="60.0" text="New">
+            <Button fx:id="playerNewBtn" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#playerNewBtnClicked" prefWidth="60.0" text="New">
                <VBox.margin>
                   <Insets left="20.0" top="20.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="playerUpdateBtn" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefWidth="60.0" text="Update">
+            <Button fx:id="playerUpdateBtn" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#playerUpdateBtnClicked" prefWidth="60.0" text="Update">
                <VBox.margin>
                   <Insets left="20.0" top="20.0" />
                </VBox.margin>

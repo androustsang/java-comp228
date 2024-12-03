@@ -280,7 +280,7 @@ public class HelloController {
                     provinceText.setText(rset.getString("PROVINCE"));
                     phoneNumberText.setText(rset.getString("PHONE_NUMBER"));
 
-                    // Allow the update
+                    // Allow the update if the Player can be found
                     playerUpdateBtn.setDisable(false);
                 } else {
                     showErrorAlert("Player ID not found");
@@ -295,10 +295,66 @@ public class HelloController {
     @FXML
     protected void playerUpdateBtnClicked() {
         // Performing the update
+        if (playerIdText.getText().isBlank() || firstNameText.getText().isBlank() || lastNameText.getText().isBlank() || addressText.getText().isBlank() || postalCodeText.getText().isBlank() || provinceText.getText().isBlank() || phoneNumberText.getText().isBlank()) {
+            showErrorAlert("All fields are required");
+        } else {
+            String psql = "Update SUN_HUNG_TSANG_PLAYER set FIRST_NAME = ?, LAST_NAME = ?, ADDRESS = ?, POSTAL_CODE = ?, PROVINCE =?, PHONE_NUMBER = ? where PLAYER_ID = ? ";
+            try {
+                PreparedStatement pstmt = connection.prepareStatement(psql);
+                pstmt.setString(1, firstNameText.getText());
+                pstmt.setString(2, lastNameText.getText());
+                pstmt.setString(3, addressText.getText());
+                pstmt.setString(4, postalCodeText.getText());
+                pstmt.setString(5, provinceText.getText());
+                pstmt.setString(6, phoneNumberText.getText());
+                pstmt.setString(7, playerIdText.getText());
+                int recordsUpdated = pstmt.executeUpdate();
+                if (recordsUpdated > 0) {
+                    System.out.println(recordsUpdated + " records updated");
+                }
 
-        
-        // After the update is performed, disable again until a search is performed.
-        playerUpdateBtn.setDisable(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            // After the update is performed, disable again until a search is performed.
+            playerUpdateBtn.setDisable(true);
+        }
+
+
+    }
+
+    @FXML
+    protected void playerNewBtnClicked() {
+        // Performing the insert of new Player
+        if (playerIdText.getText().isBlank() || firstNameText.getText().isBlank() || lastNameText.getText().isBlank() || addressText.getText().isBlank() || postalCodeText.getText().isBlank() || provinceText.getText().isBlank() || phoneNumberText.getText().isBlank()) {
+            showErrorAlert("All fields are required");
+        } else {
+            // Get the current primary key first
+            String sql = ;
+            String psql = "INSERT INTO SUN_HUNG_TSANG_PLAYER VALUES (?,?,?,?,?,?,?) ";
+            try {
+                PreparedStatement pstmt = connection.prepareStatement(psql);
+                pstmt.setString(1, playerIdText.getText());
+                pstmt.setString(2, firstNameText.getText());
+                pstmt.setString(3, lastNameText.getText());
+                pstmt.setString(4, addressText.getText());
+                pstmt.setString(5, postalCodeText.getText());
+                pstmt.setString(6, provinceText.getText());
+                pstmt.setString(7, phoneNumberText.getText());
+
+                int recordsInserted = pstmt.executeUpdate();
+
+                if (recordsInserted > 0) {
+                    System.out.println(recordsInserted + " records inserted");
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
     }
 
     @FXML
