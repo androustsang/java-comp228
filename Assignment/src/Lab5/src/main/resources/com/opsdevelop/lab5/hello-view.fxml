@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="823.0" prefWidth="926.0" styleClass="gridpane" stylesheets="@application.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.opsdevelop.lab5.HelloController">
+<GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="830.0" prefWidth="930.0" styleClass="gridpane" stylesheets="@application.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.opsdevelop.lab5.HelloController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="359.0" minWidth="10.0" prefWidth="260.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="330.0" minWidth="10.0" prefWidth="600.0" />
@@ -83,7 +83,7 @@
             </Label>
          </children>
       </VBox>
-      <Button fx:id="displayPlayerGameBtn" alignment="CENTER" mnemonicParsing="false" prefHeight="41.0" prefWidth="245.0" text="Report" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+      <Button fx:id="reportBtn" alignment="CENTER" mnemonicParsing="false" onAction="#reportBtnClicked" prefHeight="41.0" prefWidth="245.0" text="Report" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="29.0" prefWidth="480.0" style="-fx-border-color: black;" text="New Player" textAlignment="CENTER" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
          <font>
             <Font size="18.0" />
@@ -216,14 +216,27 @@
                   <Insets top="5.0" />
                </VBox.margin>
             </Label>
-            <ComboBox fx:id="playerIdCombo" prefWidth="150.0">
+            <ComboBox fx:id="playerIdCombo" onAction="#playerIdComboClicked" prefWidth="150.0">
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>
             </ComboBox>
          </children>
       </VBox>
-      <TextArea fx:id="playerTextArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+         <children>
+            <Label text=" ">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Label>
+            <TextArea fx:id="playerTextArea" prefHeight="223.0" prefWidth="195.0">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </TextArea>
+         </children>
+      </VBox>
       <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
          <children>
             <Label prefHeight="18.0" prefWidth="74.0" text="Game ID">
@@ -231,7 +244,7 @@
                   <Insets top="5.0" />
                </VBox.margin>
             </Label>
-            <ComboBox fx:id="gameIdCombo" prefWidth="150.0">
+            <ComboBox fx:id="gameIdCombo" onAction="#setGameIdComboClicked" prefWidth="150.0">
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>
@@ -271,7 +284,20 @@
             </VBox>
          </children>
       </VBox>
-      <Button fx:id="addPlayedGameBtn" mnemonicParsing="false" text="Add Played Game" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
-      <TextArea fx:id="gameTextArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+      <Button fx:id="addPlayedGameBtn" mnemonicParsing="false" onAction="#addPlayedGameBtnClicked" text="Add Played Game" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+      <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
+         <children>
+            <Label text=" ">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Label>
+            <TextArea fx:id="gameTextArea" prefHeight="230.0" prefWidth="165.0">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </TextArea>
+         </children>
+      </VBox>
    </children>
 </GridPane>
