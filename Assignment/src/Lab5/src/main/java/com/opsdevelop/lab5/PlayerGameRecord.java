@@ -2,6 +2,8 @@ package com.opsdevelop.lab5;
 
 import java.sql.Date;
 
+// Player and Game records for TableView display
+// Some fields from the 3 tables are included in the TableView
 public class PlayerGameRecord {
 
     private final String playerId;

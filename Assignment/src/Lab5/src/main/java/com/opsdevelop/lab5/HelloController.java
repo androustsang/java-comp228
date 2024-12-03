@@ -11,6 +11,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.sql.*;
 import java.util.ArrayList;
 
+// For getting the login information from the .env
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class HelloController {
@@ -107,13 +108,16 @@ public class HelloController {
 
     private Connection connection;
     private Statement stmt;
+    // Load the resource from the .env file
     private static final Dotenv dotenv = Dotenv.configure().directory("src/main/resources").load();
     private static final String URL = dotenv.get("DB_URL");
     private static final String USER = dotenv.get("DB_USER");
     private static final String PASS = dotenv.get("DB_PASS");
 
+    // For the display of database query to the table view
     private final ObservableList<PlayerGameRecord> playerGameRecords = FXCollections.observableArrayList();
 
+    // Connection to the Oracle database, performed during the initialize() method
     private void connectDatabase() {
         try {
             DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
@@ -145,9 +149,9 @@ public class HelloController {
             // Below two lines further validate the database connection
 //            String tmp = connection.isValid(5) ? "Valid Connection" : "Invalid Connection";
 //            System.out.println(tmp);
-            String sql = "SELECT * from SUN_HUNG_TSANG_PLAYER ORDER BY PLAYER_ID";
+            // Get all players information
+            String sql = "SELECT PLAYER_ID from SUN_HUNG_TSANG_PLAYER ORDER BY PLAYER_ID";
 //            String sql = "SELECT 1 from DUAL";
-//            Statement stmt = connection.createStatement();
             ResultSet rset = stmt.executeQuery(sql);
             while (rset.next()) {
                 // Get the column by Index
@@ -155,8 +159,10 @@ public class HelloController {
                 // Get the column by ColumnLabel
                 player_id = rset.getString("PLAYER_ID");
                 System.out.println(player_id);
+                // Store all the Player ID into the arraylist and then populate to the Combo control
                 player_ids.add(player_id);
             }
+            playerIdCombo.getItems().clear();
             playerIdCombo.getItems().setAll(player_ids);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -164,6 +170,7 @@ public class HelloController {
 
     }
 
+    // Similarly all the Game ID is populated into the combo.
     private void loadAllGameId () {
         String game_id ;
         ArrayList<String> game_ids = new ArrayList<String>();
@@ -185,6 +192,7 @@ public class HelloController {
     }
 
     protected void loadPlayerGameRecords() {
+        // Load information for Player, Game and "Player and Game" tables by joining them to display for the table view
         String sql = "SELECT pag.PLAYER_ID, p.FIRST_NAME, p.LAST_NAME, pag.GAME_ID, g.GAME_TITLE, pag.PLAYING_DATE, pag.SCORE FROM SUN_HUNG_TSANG_PLAYER_AND_GAME pag JOIN SUN_HUNG_TSANG_PLAYER p ON pag.PLAYER_ID = p.PLAYER_ID JOIN SUN_HUNG_TSANG_GAME g ON pag.GAME_ID = g.GAME_ID";
 
         // Clear any existing data in the ObservableList
@@ -221,8 +229,11 @@ public class HelloController {
 
     @FXML
     private void initialize() {
+        // Connect to the Oracle database first.
         connectDatabase();
+        // Populate all the Player ID into the combo control
         loadAllPlayerId();
+        // Populate all the Game ID into the combo control
         loadAllGameId();
         playerUpdateBtn.setDisable(true);   //Disable the Update Button and only enable after search
 
@@ -258,8 +269,10 @@ public class HelloController {
         alert.showAndWait();
     }
 
+    // To search and display the Player information to be updated
     @FXML
     private void playerSearchBtnClicked() {
+        // SQL statement to search for the player record based on the Player ID
         String sql = "Select PLAYER_ID, FIRST_NAME, LAST_NAME, ADDRESS, POSTAL_CODE, PROVINCE, PHONE_NUMBER FROM SUN_HUNG_TSANG_PLAYER where PLAYER_ID = '" + playerIdText.getText().trim() + "'";
 
         if (playerIdText.getText().isBlank()) {
@@ -300,12 +313,13 @@ public class HelloController {
 
     @FXML
     protected void playerUpdateBtnClicked() {
-        // Performing the update
+        // Performing the update, check all the fileds cannot be empty.
         if (playerIdText.getText().isBlank() || firstNameText.getText().isBlank() || lastNameText.getText().isBlank() || addressText.getText().isBlank() || postalCodeText.getText().isBlank() || provinceText.getText().isBlank() || phoneNumberText.getText().isBlank()) {
             showErrorAlert("All fields are required");
         } else {
             String psql = "Update SUN_HUNG_TSANG_PLAYER set FIRST_NAME = ?, LAST_NAME = ?, ADDRESS = ?, POSTAL_CODE = ?, PROVINCE =?, PHONE_NUMBER = ? where PLAYER_ID = ? ";
             try {
+                // Using prepared statement
                 PreparedStatement pstmt = connection.prepareStatement(psql);
                 pstmt.setString(1, firstNameText.getText().trim());
                 pstmt.setString(2, lastNameText.getText().trim());
@@ -475,7 +489,7 @@ public class HelloController {
 
     @FXML
     protected void playerIdComboClicked(ActionEvent event) {
-
+    // To select the player in order to input Played Game information
         String newSelectedPlayer = playerIdCombo.getSelectionModel().getSelectedItem();
         String sql = "Select PLAYER_ID, FIRST_NAME, LAST_NAME, ADDRESS, POSTAL_CODE, PROVINCE, PHONE_NUMBER FROM SUN_HUNG_TSANG_PLAYER where PLAYER_ID = '" + newSelectedPlayer + "'";
         System.out.println(newSelectedPlayer);
@@ -495,7 +509,8 @@ public class HelloController {
                 System.out.println(playerTextOutput);
                 playerTextArea.setText(playerTextOutput);
             } else {
-                showErrorAlert("Player ID not found");
+//                showErrorAlert("Player ID not found2");
+                playerTextArea.clear();
             }
         } catch (SQLException e) {
 //            throw new RuntimeException(e);
@@ -506,6 +521,7 @@ public class HelloController {
 
     @FXML
     protected void setGameIdComboClicked(ActionEvent event) {
+        // To select the Game in order to input Played Game information
         String newGameId = gameIdCombo.getSelectionModel().getSelectedItem();
         String sql = "SELECT GAME_ID,GAME_TITLE FROM SUN_HUNG_TSANG_GAME WHERE GAME_ID = '" + newGameId + "'";
         try {
