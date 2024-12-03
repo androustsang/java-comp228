@@ -55,9 +55,6 @@ public class HelloController {
     private TextField gameTitleText;
 
     @FXML
-    private Button gameUpdateBtn;
-
-    @FXML
     private TableColumn<PlayerGameRecord, String> lastNameCol;
 
     @FXML
@@ -252,6 +249,15 @@ public class HelloController {
         alert.showAndWait();
     }
 
+    // Method to show information of adding new Player or Game
+    private void showInformation(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText("Information Message");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
     @FXML
     private void playerSearchBtnClicked() {
         String sql = "Select PLAYER_ID, FIRST_NAME, LAST_NAME, ADDRESS, POSTAL_CODE, PROVINCE, PHONE_NUMBER FROM SUN_HUNG_TSANG_PLAYER where PLAYER_ID = '" + playerIdText.getText().trim() + "'";
@@ -278,7 +284,7 @@ public class HelloController {
                     addressText.setText(rset.getString("ADDRESS"));
                     postalCodeText.setText(rset.getString("POSTAL_CODE"));
                     provinceText.setText(rset.getString("PROVINCE"));
-                    phoneNumberText.setText(rset.getString("PHONE_NUMBER"));
+                    phoneNumberText.setText(String.valueOf(rset.getLong("PHONE_NUMBER")));
 
                     // Allow the update if the Player can be found
                     playerUpdateBtn.setDisable(false);
@@ -306,7 +312,7 @@ public class HelloController {
                 pstmt.setString(3, addressText.getText().trim());
                 pstmt.setString(4, postalCodeText.getText().trim());
                 pstmt.setString(5, provinceText.getText().trim());
-                pstmt.setString(6, phoneNumberText.getText().trim());
+                pstmt.setLong(6, Long.parseLong(phoneNumberText.getText().trim()));
                 pstmt.setString(7, playerIdText.getText().trim());
                 int recordsUpdated = pstmt.executeUpdate();
                 if (recordsUpdated > 0) {
@@ -357,15 +363,28 @@ public class HelloController {
                 pstmt.setString(4, addressText.getText().trim());
                 pstmt.setString(5, postalCodeText.getText().trim());
                 pstmt.setString(6, provinceText.getText().trim());
-                pstmt.setString(7, phoneNumberText.getText().trim());
+                pstmt.setLong(7, Long.parseLong(phoneNumberText.getText().trim()));
 
                 int recordsInserted = pstmt.executeUpdate();
 
                 if (recordsInserted > 0) {
                     System.out.println(recordsInserted + " records inserted");
+//                    showInformation(String.format("New Player is added.%nPlayer ID: %s%nFirst Name: %s%nLast Name: %s%nAddress: %s%nPostal Code: %s%nProvince: %s%nPhone Number: %d", newPlayerPK, firstNameText.getText().trim(), lastNameText.getText().trim(), addressText.getText().trim(), postalCodeText.getText().trim(), provinceText.getText().trim(),phoneNumberText.getText().trim()));
+                    showInformation(String.format("New Player is added.%nPlayer ID: %s%n", newPlayerPK));
                 }
+
                 // As new record is added, refresh Player ID combo
                 loadAllPlayerId();
+
+                // Clear the input
+                playerIdText.clear();
+                firstNameText.clear();
+                lastNameText.clear();
+                addressText.clear();
+                postalCodeText.clear();
+                provinceText.clear();
+                phoneNumberText.clear();
+
 
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -375,6 +394,84 @@ public class HelloController {
 
 
     }
+
+    @FXML
+    private void gameSearchBtnClicked() {
+        String sql = "Select GAME_ID, GAME_TITLE FROM SUN_HUNG_TSANG_GAME where GAME_ID = '" + gameIdText.getText().trim() + "'";
+
+        if (gameIdText.getText().isBlank()) {
+            showErrorAlert("Game ID cannot be empty");
+        } else {
+            // Clear the fields first before continuing
+            gameTitleText.clear();
+
+            try {
+                ResultSet rset = stmt.executeQuery(sql);
+
+                if (rset.next()) {
+                    gameIdText.setText(rset.getString("GAME_ID"));
+                    gameTitleText.setText(rset.getString("GAME_TITLE"));
+                } else {
+                    showErrorAlert("GAME ID not found");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    @FXML
+    protected void gameNewBtnClicked() {
+        // Performing the insert of new Game
+        if (gameTitleText.getText().isBlank()) {
+            showErrorAlert("Game Title field is required");
+        } else {
+            // Get the current maximum primary key first
+            // All Primary Key format for Game table is G000 ("G" followed by 3 digits)
+
+            String sql = "SELECT GAME_ID FROM SUN_HUNG_TSANG_GAME ORDER BY TO_NUMBER(SUBSTR(GAME_ID, 2)) DESC FETCH FIRST 1 ROWS ONLY";
+            // The above SQL returned the current maximum primary key
+
+            String psql = "INSERT INTO SUN_HUNG_TSANG_GAME VALUES (?,?) ";
+            // The above is the prepared statement for the insert
+            try {
+                // First build a new primary key by checking on the existing largest primary key
+                ResultSet rset = stmt.executeQuery(sql);
+                String newGamePK ;
+                if (rset.next()) {
+                    // if there is an existing maximum primary key
+                    String curMaxGamePK = rset.getString("GAME_ID");
+                    newGamePK = incPrimaryKey(curMaxGamePK);
+                } else {
+                    // There is no record in the table.
+                    newGamePK = "G001";
+                }
+
+                PreparedStatement pstmt = connection.prepareStatement(psql);
+                pstmt.setString(1, newGamePK);
+                pstmt.setString(2, gameTitleText.getText().trim());
+
+                int recordsInserted = pstmt.executeUpdate();
+
+                if (recordsInserted > 0) {
+                    System.out.println(recordsInserted + " records inserted");
+                    showInformation(String.format("New Game is added.%nGame ID: %s%n", newGamePK));
+                    gameIdText.clear();
+                    gameTitleText.clear();
+                }
+                // As new record is added, refresh Player ID combo
+                loadAllGameId();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
+    }
+
 
     @FXML
     protected void playerIdComboClicked(ActionEvent event) {
@@ -393,8 +490,8 @@ public class HelloController {
                 String address = rset.getString("ADDRESS");
                 String postalCode = rset.getString("POSTAL_CODE");
                 String province = rset.getString("PROVINCE");
-                int phoneNumber = rset.getInt("PHONE_NUMBER");
-                String playerTextOutput = String.format("Player ID: %s%nFirst Name: %s%nLast Name: %s%nAddress: %s%nPostal Code: %s%nProvince: %s%nPhone Number: %d", player_id, firstName, lastName, address, postalCode, province,phoneNumber);
+                String phoneNumber = String.valueOf(rset.getLong("PHONE_NUMBER"));
+                String playerTextOutput = String.format("Player ID: %s%nFirst Name: %s%nLast Name: %s%nAddress: %s%nPostal Code: %s%nProvince: %s%nPhone Number: %s", player_id, firstName, lastName, address, postalCode, province,phoneNumber);
                 System.out.println(playerTextOutput);
                 playerTextArea.setText(playerTextOutput);
             } else {
