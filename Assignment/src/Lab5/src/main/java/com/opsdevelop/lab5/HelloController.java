@@ -301,13 +301,13 @@ public class HelloController {
             String psql = "Update SUN_HUNG_TSANG_PLAYER set FIRST_NAME = ?, LAST_NAME = ?, ADDRESS = ?, POSTAL_CODE = ?, PROVINCE =?, PHONE_NUMBER = ? where PLAYER_ID = ? ";
             try {
                 PreparedStatement pstmt = connection.prepareStatement(psql);
-                pstmt.setString(1, firstNameText.getText());
-                pstmt.setString(2, lastNameText.getText());
-                pstmt.setString(3, addressText.getText());
-                pstmt.setString(4, postalCodeText.getText());
-                pstmt.setString(5, provinceText.getText());
-                pstmt.setString(6, phoneNumberText.getText());
-                pstmt.setString(7, playerIdText.getText());
+                pstmt.setString(1, firstNameText.getText().trim());
+                pstmt.setString(2, lastNameText.getText().trim());
+                pstmt.setString(3, addressText.getText().trim());
+                pstmt.setString(4, postalCodeText.getText().trim());
+                pstmt.setString(5, provinceText.getText().trim());
+                pstmt.setString(6, phoneNumberText.getText().trim());
+                pstmt.setString(7, playerIdText.getText().trim());
                 int recordsUpdated = pstmt.executeUpdate();
                 if (recordsUpdated > 0) {
                     System.out.println(recordsUpdated + " records updated");
@@ -326,27 +326,46 @@ public class HelloController {
     @FXML
     protected void playerNewBtnClicked() {
         // Performing the insert of new Player
-        if (playerIdText.getText().isBlank() || firstNameText.getText().isBlank() || lastNameText.getText().isBlank() || addressText.getText().isBlank() || postalCodeText.getText().isBlank() || provinceText.getText().isBlank() || phoneNumberText.getText().isBlank()) {
-            showErrorAlert("All fields are required");
+        if (firstNameText.getText().isBlank() || lastNameText.getText().isBlank() || addressText.getText().isBlank() || postalCodeText.getText().isBlank() || provinceText.getText().isBlank() || phoneNumberText.getText().isBlank()) {
+            showErrorAlert("All fields except Player ID are required");
         } else {
-            // Get the current primary key first
-            String sql = ;
+            // Get the current maximum primary key first
+            // All Primary Key format for Player table is P000 ("P" followed by 3 digits
+
+            String sql = "SELECT PLAYER_ID FROM SUN_HUNG_TSANG_PLAYER ORDER BY TO_NUMBER(SUBSTR(PLAYER_ID, 2)) DESC FETCH FIRST 1 ROWS ONLY";
+            // The above SQL returned the current maximum primary key
+
             String psql = "INSERT INTO SUN_HUNG_TSANG_PLAYER VALUES (?,?,?,?,?,?,?) ";
+            // The above is the prepared statement for the insert
             try {
+                // First build a new primary key by checking on the existing largest primary key
+                ResultSet rset = stmt.executeQuery(sql);
+                String newPlayerPK ;
+                if (rset.next()) {
+                    // if there is an existing maximum primary key
+                    String curMaxPlayerPK = rset.getString("PLAYER_ID");
+                    newPlayerPK = incPrimaryKey(curMaxPlayerPK);
+                } else {
+                    // There is no record in the table.
+                    newPlayerPK = "P001";
+                }
+
                 PreparedStatement pstmt = connection.prepareStatement(psql);
-                pstmt.setString(1, playerIdText.getText());
-                pstmt.setString(2, firstNameText.getText());
-                pstmt.setString(3, lastNameText.getText());
-                pstmt.setString(4, addressText.getText());
-                pstmt.setString(5, postalCodeText.getText());
-                pstmt.setString(6, provinceText.getText());
-                pstmt.setString(7, phoneNumberText.getText());
+                pstmt.setString(1, newPlayerPK);
+                pstmt.setString(2, firstNameText.getText().trim());
+                pstmt.setString(3, lastNameText.getText().trim());
+                pstmt.setString(4, addressText.getText().trim());
+                pstmt.setString(5, postalCodeText.getText().trim());
+                pstmt.setString(6, provinceText.getText().trim());
+                pstmt.setString(7, phoneNumberText.getText().trim());
 
                 int recordsInserted = pstmt.executeUpdate();
 
                 if (recordsInserted > 0) {
                     System.out.println(recordsInserted + " records inserted");
                 }
+                // As new record is added, refresh Player ID combo
+                loadAllPlayerId();
 
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -414,7 +433,7 @@ public class HelloController {
         // First validate all fields are not empty
         String playerId = playerIdCombo.getSelectionModel().getSelectedItem();
         String gameId = gameIdCombo.getSelectionModel().getSelectedItem();
-        String datepicked = playingDate.getEditor().getText();
+        String datepicked = playingDate.getEditor().getText().trim();
         String score = scoreText.getText().trim();
 
         if ( playerId == null || gameId == null || datepicked.isBlank() || score.isBlank() ) {
@@ -488,6 +507,16 @@ public class HelloController {
             return false; // If an exception occurs, it's not a valid number
         }
     }
+
+    private String incPrimaryKey(String text) {
+        // To increase the primary key by one assuming the format is P001 or G001
+        String prefix = text.substring(0, 1);
+        String suffix = text.substring(1);
+
+        Integer i = Integer.parseInt(suffix);
+        return String.format("%s%03d", prefix, i+1);
+    }
+    
 //    @FXML
 //    protected void cleanup() {
 //        disconnectDatabase();
