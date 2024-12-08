@@ -5,7 +5,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class AccountTest {
     public static void main(String[] args) {
         // Create a thread pool of 2
-        ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(2);
+        ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(3);
 
 
         // Create an ArrayList to hold all transcation objects
@@ -20,6 +20,8 @@ public class AccountTest {
             transArrayList.add(new Transcation("Thread_" + i, account));
         }
 
+        System.out.println("Initial Account Balance: " + account.getBalance());
+        System.out.println();
         // Now put all the transcations into the threads
         for (Transcation transcation : transArrayList) {
             System.out.println("Created Thread: " + transcation.getThreadName());
@@ -27,6 +29,5 @@ public class AccountTest {
         }
 
         executor.shutdown();
-
     }
 }
