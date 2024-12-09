@@ -30,7 +30,11 @@ public class Account {
         // Using print statement to show that the operation is in progress
         System.out.println(green + "Withdraw " + amount + " from account " + this + reset);
         System.out.println(green + "Balance Before Withdraw: " + balance + reset);
-        this.balance -= amount;
+        if (amount <= this.balance && amount > 0) {
+            this.balance -= amount;
+        } else {
+            System.out.println(green + "Insufficient Balance" + reset);
+        }
         System.out.println(green + "Balance After Withdraw: " + balance + reset);
     }
 
